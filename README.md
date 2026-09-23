@@ -162,15 +162,13 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 - **Firmware** `.swfw`: pacote assinado com o código e as dependências, instalado ao lado da versão atual.
 - **Imagem para Raspberry Pi** (`.img.xz`, Pi 3/4/5): sistema montado do zero a partir dos repositórios oficiais,
   sem dados do equipamento que gerou; partição expandida no primeiro boot.
-- **Disco para Proxmox VE ARM64** (`.qcow2`): Debian 13 arm64 com boot UEFI, VirtIO e console serial.
 - Configuração inicial editável antes de ligar (`berrycade.txt` na partição de boot).
 
 ## Hardware
 
 - Raspberry Pi 3, 4 ou 5 (64 bits). Para IDS/IPS, prefira um Pi 4 ou 5 com 4 GB de RAM ou mais.
 - Cartão microSD de 8 GB ou mais.
-- Uma segunda porta de rede: qualquer adaptador USB-Ethernet (Realtek, ASIX etc.).
-- Ou uma VM em **Proxmox VE ARM64** com duas placas VirtIO.
+- **Uma segunda porta de rede: qualquer adaptador USB-Ethernet (Realtek, ASIX etc.)**.
 
 ## Instalação
 
@@ -180,33 +178,6 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
    balenaEtcher.
 2. Opcional: antes de ligar, edite `berrycade.txt` na partição de boot (hostname, IP da LAN, gateway, DNS).
 3. Ligue o Pi com a LAN conectada. No primeiro boot a partição é expandida e o assistente inicial é aberto.
-
-### Proxmox VE ARM64
-
-1. Crie a VM com BIOS **OVMF (UEFI)**, máquina `virt` e duas placas **VirtIO** (`net0` = LAN, `net1` = WAN).
-2. Importe o disco e coloque-o como primeiro na ordem de boot:
-
-```bash
-qm disk import <vmid> berrycade-<versão>-proxmox-arm64.qcow2 <storage> --format qcow2
-```
-
-3. Use o console **xterm.js** (serial). Passo a passo em [docs/FIRMWARE.md](docs/FIRMWARE.md#imagem-para-proxmox-ve-arm64).
-
-### A partir do código
-
-Em um Raspberry Pi OS Lite 64 bits recém-instalado, como root:
-
-```bash
-git clone <url-deste-repositório> /usr/lib/berrycade
-```
-
-```bash
-/usr/lib/berrycade/install.sh
-```
-
-```bash
-reboot
-```
 
 ## Primeiro acesso
 
@@ -248,35 +219,6 @@ berrycade unblock <usuário|IP>   # remove o bloqueio (--all remove todos)
 berrycade sessions           # sessões abertas no painel
 berrycade logout <usuário>   # encerra as sessões de um usuário
 ```
-
-## Estrutura do repositório
-
-| Caminho | Conteúdo |
-|---|---|
-| `berrycade/` | Aplicação Python: API, schema, renderizadores, motor de aplicação, serviços, geradores de imagem |
-| `web/static/` | Painel (JavaScript puro, sem etapa de build) |
-| `bin/` | CLI, atualizador, geradores de imagem, primeiro boot, recuperação |
-| `systemd/` | Unidades dos serviços |
-| `defaults/` | Configuração de fábrica, Suricata, ulogd, sysctl, udev, boot do Raspberry Pi |
-| `squid-errors/` | Páginas de bloqueio do filtro web |
-| `docs/` | Arquitetura, schema da configuração, firmware e imagens |
-| `secwall/` | Compatibilidade com o atualizador das versões 1.0.x (nome antigo do projeto) |
-
-No equipamento, o código fica em `/usr/lib/berrycade`, a configuração em `/etc/berrycade` e os dados em
-`/var/lib/berrycade` e `/var/log/berrycade`.
-
-## Desenvolvimento
-
-O painel pode rodar sem tocar no sistema — renderiza, valida e faz `nft -c`, mas não aplica nada:
-
-```bash
-BERRYCADE_DRYRUN=1 BERRYCADE_PORT=8443 venv/bin/python -m berrycade.main
-```
-
-O equipamento de desenvolvimento (qualquer máquina ARM64: um Raspberry Pi ou uma VM) roda direto do repositório e
-gera firmwares e imagens em **Sistema › Desenvolvimento**. Os equipamentos de produção rodam releases assinados
-em `/opt/berrycade/releases`. A chave de assinatura fica fora do repositório.
-
 ## Listas e regras de terceiros
 
 O filtro web baixa listas públicas no próprio equipamento: UT1 (Université Toulouse Capitole, CC BY-SA 4.0),
