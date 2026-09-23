@@ -1,5 +1,19 @@
 # Changelog — BerryCade
 
+## Não lançado (próxima versão)
+
+- **Imagem do Raspberry Pi montada do zero:** em vez de copiar o equipamento de desenvolvimento, o gerador monta um sistema Raspberry Pi OS Lite novo a partir dos repositórios oficiais (Debian 13 + archive.raspberrypi.com), para Pi 3, 4 e 5. A imagem fica reproduzível, sem sobras do equipamento que gera, e pode ser gerada em qualquer máquina ARM64. A chave pública de assinatura é gravada como confiável; a geração falha se ela faltar.
+- Imagens: correção de imagens geradas com o sistema de arquivos corrompido (desmontagem "preguiçosa" seguida de fsck). A geração agora desmonta de verdade e falha se o fsck encontrar qualquer erro.
+- Sistema › Desenvolvimento: botão para cancelar a geração de uma imagem; logs de geração e de atualização acompanham a última linha.
+- Correção: gerações de imagem e o atualizador eram vistos como parados enquanto rodavam (estado "activating"), o que permitia duas gerações ao mesmo tempo e, na migração a partir da 1.0.x, podia remover as unidades provisórias antes de o atualizador antigo terminar.
+- Políticas: a visão escolhida (por par de zonas ou por sequência) fica salva no firewall, por administrador. Ordem das regras alterável arrastando a linha, nas políticas e no NAT central; na visão por par de zonas, a regra só pode ser solta dentro do mesmo par.
+- **NAT integrado às políticas**, como nos firewalls de mercado: por padrão o NAT é definido em cada política (IP da interface de saída ou IP pool) e a tela separada sai do menu. A antiga "NAT de saída" virou o modo opcional **NAT central** (Sistema › Configurações). Configurações que já tinham regras nessa tabela continuam em NAT central automaticamente.
+- Correção: depois de uma alteração aplicada (por exemplo, mover uma regra), a lista de políticas podia ficar vazia e o editor não abria.
+- CLI: comandos para os usuários do painel web — `berrycade users`, `passwd <usuário>` (com `--temporary`), `blocked`, `unblock <usuário|IP>` (ou `--all`), `sessions` e `logout <usuário>`, por um canal local (somente 127.0.0.1 e com token legível apenas pelo root). `reset-admin` encerra as sessões do admin na hora.
+- Login mais resistente: bloqueio após 5 falhas em 5 minutos por IP e por usuário, sem brecha para tentativas simultâneas; mesma resposta e mesmo tempo para usuário inexistente e para origem fora dos hosts confiáveis. Trocar a senha encerra as outras sessões do usuário.
+- Logo nova, mais simples: escudo vermelho com framboesa branca, em cores chapadas (fonte vetorial em `web/static/img/logo.svg`); favicon também em SVG.
+- Manual do usuário em `docs/BerryCade-Manual-do-Usuario.docx`.
+
 ## 1.0.14 — 2026-09-23
 
 - Imagem: o boot passa a localizar as partições pelo UUID do sistema de arquivos (`root=UUID=`, fstab com `UUID=`), e não mais pelo ID do disco (PARTUUID), que pode ser alterado depois da gravação. Corrige o Pi parado em "Waiting for root file system".

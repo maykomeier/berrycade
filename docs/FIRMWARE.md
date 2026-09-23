@@ -34,7 +34,7 @@ com a mesma versão e código diferente confundem o histórico dos equipamentos 
 ## Imagem (`.img.xz`)
 
 Gerada no equipamento de desenvolvimento (`bin/berrycade-image-build`, serviço `berrycade-image-build`), que pode
-ser qualquer máquina ARM64 (um Raspberry Pi ou a VM no Proxmox). A imagem é **montada do zero** com `mmdebstrap`
+ser qualquer máquina ARM64 com Debian 13. A imagem é **montada do zero** com `mmdebstrap`
 a partir dos repositórios oficiais do Debian 13 e do `archive.raspberrypi.com` (chave pública em
 `defaults/rpi/raspberrypi-archive-keyring.pgp`); nada é copiado do equipamento que gera:
 
@@ -79,27 +79,3 @@ Unidades com a 1.0.x ainda usam o atualizador antigo, que espera `python -m secw
 - o manifesto continua com `format: rpi-secwall-firmware`, que o verificador antigo exige (o novo aceita os dois).
 
 Quando o atualizador antigo termina, o `berrycade-api` remove as unidades provisórias no próximo início.
-
-## Imagem para Proxmox VE (ARM64)
-
-Gerada em Sistema › Desenvolvimento › "Gerar imagem para Proxmox ARM64" (`bin/berrycade-vm-build`, serviço
-`berrycade-vm-build`). Assim como a imagem do Raspberry, é uma instalação nova de Debian 13 arm64 feita com `mmdebstrap`:
-
-- disco GPT de 4 GB: partição EFI (FAT32, 256 MB) + raiz ext4, montadas por UUID;
-- kernel genérico `linux-image-arm64` (VirtIO), GRUB EFI no caminho removível (`EFI/BOOT/BOOTAA64.EFI`), então
-  o OVMF/AAVMF encontra o boot sem entrada na NVRAM;
-- `net.ifnames=0` (placas `eth0`, `eth1`), console em `ttyAMA0` e `tty0`, `qemu-guest-agent`;
-- usuário `berrycade` com a senha deste equipamento (troca obrigatória no primeiro login, se marcado);
-  chaves SSH do servidor geradas no primeiro boot;
-- release assinado instalado em `/opt/berrycade/releases`, igual à imagem do Pi; `berrycade.txt` fica na
-  partição EFI e a partição raiz cresce até o tamanho do disco no primeiro boot.
-
-No Proxmox (ARM64): crie a VM com BIOS **OVMF (UEFI)**, máquina `virt`, sem disco, e duas placas **VirtIO**
-(`net0` = LAN, `net1` = WAN, de preferência com o firewall do Proxmox desligado). Depois importe o disco:
-
-```bash
-qm importdisk <vmid> berrycade-<versão>-proxmox-arm64.qcow2 <storage>
-```
-
-Anexe o disco importado (SCSI/VirtIO), coloque-o como primeiro na ordem de boot e aumente o tamanho se quiser
-(a partição cresce sozinha no primeiro boot).

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Raspberry Pi 3 · 4 · 5 &nbsp;•&nbsp;•&nbsp; Debian 13 "trixie" &nbsp;•&nbsp; nftables · Suricata · strongSwan · Tailscale
+  Raspberry Pi 3 · 4 · 5 &nbsp;•&nbsp; Debian 13 "trixie" &nbsp;•&nbsp; nftables · Suricata · strongSwan · Tailscale
 </p>
 
 ---
@@ -25,6 +25,7 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 ## Sumário
 
 - [Destaques](#destaques)
+- [Telas](#telas)
 - [Funcionalidades](#funcionalidades)
 - [Hardware](#hardware)
 - [Instalação](#instalação)
@@ -44,7 +45,29 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
   sem confirmação em 60 s, a configuração anterior volta sozinha.
 - **Nada fora de sincronia**: o painel e o kernel nunca divergem, e um verificador corrige qualquer diferença.
 - **Atualizações seguras**: firmware assinado (Ed25519), autoteste antes de ativar e volta automática.
-- **Pronto para distribuir**: gera imagens para Raspberry Pi.
+- **Pronto para distribuir**: gera imagens para Raspberry Pi a partir do código.
+
+## Telas
+
+<p align="center">
+  <img src="docs/screenshots/painel.png" alt="Painel de Controle" width="100%"><br>
+  <sub><b>Painel de Controle</b> — recursos do sistema, consumo da WAN e da LAN, portas e serviços</sub>
+</p>
+
+<table>
+  <tr>
+    <td width="50%" align="center"><img src="docs/screenshots/politicas.png" alt="Política de Firewall"><br><sub><b>Política de Firewall</b> — regras zona → zona com NAT, perfis e contadores</sub></td>
+    <td width="50%" align="center"><img src="docs/screenshots/nova-politica.png" alt="Editor de política"><br><sub><b>Editor de política</b> — NAT, log e perfis de segurança na própria regra</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><img src="docs/screenshots/filtro-web.png" alt="Filtro Web"><br><sub><b>Filtro Web</b> — permitir, monitorar ou bloquear por categoria</sub></td>
+    <td width="50%" align="center"><img src="docs/screenshots/access-points.png" alt="Access Points"><br><sub><b>Access Points</b> — UniFi monitorado sem controladora</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><img src="docs/screenshots/assistente-ipsec.png" alt="Assistente IPsec"><br><sub><b>Assistente IPsec</b> — VPN site-to-site em quatro passos</sub></td>
+    <td width="50%" align="center"><img src="docs/screenshots/tailscale.png" alt="Tailscale"><br><sub><b>Tailscale</b> — subnet router e exit node pelo painel</sub></td>
+  </tr>
+</table>
 
 ## Funcionalidades
 
@@ -88,7 +111,7 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 
 - **IDS / IPS com Suricata** via NFQUEUE:
   - modo por zona: desligado, **IDS** (só alerta) ou **IPS** (bloqueia);
-  - regras **ET Open** com atualização automática diária e desativação de assinaturas específicas (SIDs);
+  - regras **ET Open** com atualização automática diária;
   - *fail-open*: se o Suricata parar, o tráfego continua passando em vez de derrubar a rede;
   - uso de CPU e das filas, e alertas no painel.
 - **Filtro web** por perfil:
@@ -179,6 +202,22 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 2. Opcional: antes de ligar, edite `berrycade.txt` na partição de boot (hostname, IP da LAN, gateway, DNS).
 3. Ligue o Pi com a LAN conectada. No primeiro boot a partição é expandida e o assistente inicial é aberto.
 
+### A partir do código
+
+Em um Raspberry Pi OS Lite 64 bits recém-instalado, como root:
+
+```bash
+git clone <url-deste-repositório> /usr/lib/berrycade
+```
+
+```bash
+/usr/lib/berrycade/install.sh
+```
+
+```bash
+reboot
+```
+
 ## Primeiro acesso
 
 - Endereço padrão: `https://10.0.0.99/` (LAN 10.0.0.99/24, gateway 10.0.0.254, DNS 8.8.8.8).
@@ -244,7 +283,7 @@ O painel pode rodar sem tocar no sistema — renderiza, valida e faz `nft -c`, m
 BERRYCADE_DRYRUN=1 BERRYCADE_PORT=8443 venv/bin/python -m berrycade.main
 ```
 
-O equipamento de desenvolvimento (qualquer máquina ARM64: um Raspberry Pi ou uma VM) roda direto do repositório e
+O equipamento de desenvolvimento (qualquer máquina ARM64 com Debian 13) roda direto do repositório e
 gera firmwares e imagens em **Sistema › Desenvolvimento**. Os equipamentos de produção rodam releases assinados
 em `/opt/berrycade/releases`. A chave de assinatura fica fora do repositório.
 
