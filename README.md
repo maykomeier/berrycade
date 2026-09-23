@@ -103,7 +103,7 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
   - exceções por categoria (bancos, financeiro) e por domínio;
   - bloqueio de sites com certificado inválido e de QUIC (força HTTPS sobre TCP para poder inspecionar).
 
-### Wi-Fi (UniFi sem controladora)
+### Wi-Fi (UniFi APs somente leitura )
 
 - Access points **UniFi** monitorados por SSH, sem depender da controladora: adicione com IP, usuário e senha —
   a senha é usada uma única vez para o firewall instalar a própria chave e **não é armazenada**.
