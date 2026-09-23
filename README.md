@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Raspberry Pi 3 · 4 · 5 &nbsp;•&nbsp; Proxmox VE (ARM64) &nbsp;•&nbsp; Debian 13 "trixie" &nbsp;•&nbsp; nftables · Suricata · strongSwan · Tailscale
+  Raspberry Pi 3 · 4 · 5 &nbsp;•&nbsp;•&nbsp; Debian 13 "trixie" &nbsp;•&nbsp; nftables · Suricata · strongSwan · Tailscale
 </p>
 
 ---
@@ -44,7 +44,7 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
   sem confirmação em 60 s, a configuração anterior volta sozinha.
 - **Nada fora de sincronia**: o painel e o kernel nunca divergem, e um verificador corrige qualquer diferença.
 - **Atualizações seguras**: firmware assinado (Ed25519), autoteste antes de ativar e volta automática.
-- **Pronto para distribuir**: gera imagens para Raspberry Pi e discos para Proxmox a partir do código.
+- **Pronto para distribuir**: gera imagens para Raspberry Pi.
 
 ## Funcionalidades
 
@@ -162,7 +162,6 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 - **Firmware** `.swfw`: pacote assinado com o código e as dependências, instalado ao lado da versão atual.
 - **Imagem para Raspberry Pi** (`.img.xz`, Pi 3/4/5): sistema montado do zero a partir dos repositórios oficiais,
   sem dados do equipamento que gerou; partição expandida no primeiro boot.
-- **Disco para Proxmox VE ARM64** (`.qcow2`): Debian 13 arm64 com boot UEFI, VirtIO e console serial.
 - Configuração inicial editável antes de ligar (`berrycade.txt` na partição de boot).
 
 ## Hardware
@@ -170,7 +169,6 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 - Raspberry Pi 3, 4 ou 5 (64 bits). Para IDS/IPS, prefira um Pi 4 ou 5 com 4 GB de RAM ou mais.
 - Cartão microSD de 8 GB ou mais.
 - Uma segunda porta de rede: qualquer adaptador USB-Ethernet (Realtek, ASIX etc.).
-- Ou uma VM em **Proxmox VE ARM64** com duas placas VirtIO.
 
 ## Instalação
 
@@ -180,33 +178,6 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
    balenaEtcher.
 2. Opcional: antes de ligar, edite `berrycade.txt` na partição de boot (hostname, IP da LAN, gateway, DNS).
 3. Ligue o Pi com a LAN conectada. No primeiro boot a partição é expandida e o assistente inicial é aberto.
-
-### Proxmox VE ARM64
-
-1. Crie a VM com BIOS **OVMF (UEFI)**, máquina `virt` e duas placas **VirtIO** (`net0` = LAN, `net1` = WAN).
-2. Importe o disco e coloque-o como primeiro na ordem de boot:
-
-```bash
-qm disk import <vmid> berrycade-<versão>-proxmox-arm64.qcow2 <storage> --format qcow2
-```
-
-3. Use o console **xterm.js** (serial). Passo a passo em [docs/FIRMWARE.md](docs/FIRMWARE.md#imagem-para-proxmox-ve-arm64).
-
-### A partir do código
-
-Em um Raspberry Pi OS Lite 64 bits recém-instalado, como root:
-
-```bash
-git clone <url-deste-repositório> /usr/lib/berrycade
-```
-
-```bash
-/usr/lib/berrycade/install.sh
-```
-
-```bash
-reboot
-```
 
 ## Primeiro acesso
 
