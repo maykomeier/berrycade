@@ -12,6 +12,17 @@
   Raspberry Pi 3 · 4 · 5 &nbsp;•&nbsp; Debian 13 "trixie" &nbsp;•&nbsp; nftables · Suricata · strongSwan · Tailscale
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/status-BETA-E63946?style=for-the-badge" alt="Status: BETA">
+</p>
+
+> [!WARNING]
+> **O BerryCade está em BETA.** O projeto ainda está em fase de testes, mas já está disponível para todos
+> testarem — e recebe **atualizações constantes**, com novas funções e correções. Pode haver falhas e mudanças
+> de comportamento entre versões: teste antes de colocar na borda de uma rede importante e mantenha um backup
+> da configuração (Sistema › Backup e Restauração). Encontrou um problema ou tem uma sugestão? Abra uma
+> *issue* neste repositório — o retorno de quem testa é o que guia as próximas versões.
+
 ---
 
 O **BerryCade** transforma um Raspberry Pi em um firewall completo para a borda da internet: PPPoE, VLANs,
@@ -33,7 +44,6 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 - [Como funciona](#como-funciona)
 - [Linha de comando](#linha-de-comando)
 - [Estrutura do repositório](#estrutura-do-repositório)
-- [Desenvolvimento](#desenvolvimento)
 - [Listas e regras de terceiros](#listas-e-regras-de-terceiros)
 
 ## Destaques
@@ -45,7 +55,7 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
   sem confirmação em 60 s, a configuração anterior volta sozinha.
 - **Nada fora de sincronia**: o painel e o kernel nunca divergem, e um verificador corrige qualquer diferença.
 - **Atualizações seguras**: firmware assinado (Ed25519), autoteste antes de ativar e volta automática.
-- **Pronto para distribuir**: gera imagens para Raspberry Pi a partir do código.
+- **Fácil de instalar**: imagem pronta para gravar no cartão e assistente de configuração no primeiro acesso.
 
 ## Telas
 
@@ -195,28 +205,10 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 
 ## Instalação
 
-### Raspberry Pi (imagem)
-
-1. Grave o arquivo `berrycade-<versão>.img.xz` com o Raspberry Pi Imager ("Use custom", sem personalização) ou o
+1. Baixe a imagem `berrycade-<versão>.img.xz` na página de **Releases** deste repositório e grave com o Raspberry Pi Imager ("Use custom", sem personalização) ou o
    balenaEtcher.
 2. Opcional: antes de ligar, edite `berrycade.txt` na partição de boot (hostname, IP da LAN, gateway, DNS).
 3. Ligue o Pi com a LAN conectada. No primeiro boot a partição é expandida e o assistente inicial é aberto.
-
-### A partir do código
-
-Em um Raspberry Pi OS Lite 64 bits recém-instalado, como root:
-
-```bash
-git clone <url-deste-repositório> /usr/lib/berrycade
-```
-
-```bash
-/usr/lib/berrycade/install.sh
-```
-
-```bash
-reboot
-```
 
 ## Primeiro acesso
 
@@ -237,7 +229,7 @@ navegador ─HTTPS─▶ API (FastAPI) ─▶ config.yaml (git) ─▶ render �
 Mais detalhes:
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): arquitetura, fluxo de aplicação e marcações de conexão.
 - [docs/SCHEMA.md](docs/SCHEMA.md): schema do arquivo de configuração.
-- [docs/FIRMWARE.md](docs/FIRMWARE.md): firmware, atualizações, desenvolvimento × produção e imagens.
+- [docs/FIRMWARE.md](docs/FIRMWARE.md): firmware, atualizações e imagens.
 - [CHANGELOG.md](CHANGELOG.md): mudanças de cada versão.
 
 ## Linha de comando
@@ -274,18 +266,6 @@ berrycade logout <usuário>   # encerra as sessões de um usuário
 
 No equipamento, o código fica em `/usr/lib/berrycade`, a configuração em `/etc/berrycade` e os dados em
 `/var/lib/berrycade` e `/var/log/berrycade`.
-
-## Desenvolvimento
-
-O painel pode rodar sem tocar no sistema — renderiza, valida e faz `nft -c`, mas não aplica nada:
-
-```bash
-BERRYCADE_DRYRUN=1 BERRYCADE_PORT=8443 venv/bin/python -m berrycade.main
-```
-
-O equipamento de desenvolvimento (qualquer máquina ARM64 com Debian 13) roda direto do repositório e
-gera firmwares e imagens em **Sistema › Desenvolvimento**. Os equipamentos de produção rodam releases assinados
-em `/opt/berrycade/releases`. A chave de assinatura fica fora do repositório.
 
 ## Listas e regras de terceiros
 
