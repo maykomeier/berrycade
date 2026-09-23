@@ -201,7 +201,7 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 
 - Raspberry Pi 3, 4 ou 5 (64 bits). Para IDS/IPS, prefira um Pi 4 ou 5 com 4 GB de RAM ou mais.
 - Cartão microSD de 8 GB ou mais.
-- Uma segunda porta de rede: qualquer adaptador USB-Ethernet (Realtek, ASIX etc.).
+- ***Uma segunda porta de rede: qualquer adaptador USB-Ethernet (Realtek, ASIX etc.)***.
 
 ## Instalação
 
