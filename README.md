@@ -212,7 +212,7 @@ volta automática se você perder o acesso. Toda revisão fica versionada em git
 
 ## Primeiro acesso
 
-- Endereço padrão: `https://10.0.0.99/` (LAN 10.0.0.99/24, gateway 10.0.0.254, DNS 8.8.8.8).
+- Endereço padrão: `https://10.0.0.98/` (LAN 10.0.0.98/24, gateway 10.0.0.254, DNS 8.8.8.8).
 - Usuário `admin`, senha `admin` — a troca é obrigatória no primeiro login.
 - O assistente inicial pergunta as portas LAN/WAN, o IP da LAN, a conexão WAN e o hostname.
 
