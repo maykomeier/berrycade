@@ -16,6 +16,10 @@
   <img src="https://img.shields.io/badge/status-BETA-E63946?style=for-the-badge" alt="Status: BETA">
 </p>
 
+<p align="center">
+  <a href="https://berrycade.com.br">Conheça nosso Site, Documentação, Suporte</a> 
+</p>
+
 > [!WARNING]
 > **O BerryCade está em BETA.** O projeto ainda está em fase de testes, mas já está disponível para todos
 > testarem — e recebe **atualizações constantes**, com novas funções e correções. Pode haver falhas e mudanças
