@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="https://berrycade.com.br">Conheça nosso Site, Documentação, Suporte</a> 
+  <a href="https://berrycade.berrylabs.com.br">Conheça nosso Site, Documentação, Suporte</a> 
 </p>
 
 > [!WARNING]
